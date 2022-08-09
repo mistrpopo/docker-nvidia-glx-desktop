@@ -1,5 +1,5 @@
 # Ubuntu release versions 18.04 and 20.04 are supported
-ARG UBUNTU_RELEASE=20.04
+ARG UBUNTU_RELEASE=18.04
 ARG CUDA_VERSION=11.2.2
 FROM nvcr.io/nvidia/cudagl:${CUDA_VERSION}-runtime-ubuntu${UBUNTU_RELEASE}
 
@@ -9,25 +9,10 @@ ARG UBUNTU_RELEASE
 ARG CUDA_VERSION
 # Make all NVIDIA GPUs visible, but we want to manually install drivers
 ARG NVIDIA_VISIBLE_DEVICES=all
-# Supress interactive menu while installing keyboard-configuration
-ARG DEBIAN_FRONTEND=noninteractive
 ENV NVIDIA_DRIVER_CAPABILITIES all
-ENV PULSE_SERVER 127.0.0.1:4713
 
 # Default environment variables (password is "mypasswd")
 ENV TZ UTC
-ENV SIZEW 1920
-ENV SIZEH 1080
-ENV REFRESH 60
-ENV DPI 96
-ENV CDEPTH 24
-ENV VIDEO_PORT DFP
-ENV PASSWD mypasswd
-ENV NOVNC_ENABLE false
-ENV WEBRTC_ENCODER nvh264enc
-ENV WEBRTC_ENABLE_RESIZE false
-ENV ENABLE_AUDIO true
-ENV ENABLE_BASIC_AUTH true
 
 # Temporary fix for NVIDIA container repository
 RUN apt-get clean && \
@@ -198,3 +183,40 @@ RUN dpkg --add-architecture i386 && \
 
 # Add custom packages below this comment
 
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/webnews/lib
+ENV PATH=$PATH:/opt/webnews/bin
+
+RUN apt-get update -y               \
+    && apt-get install -y           \
+        nano                        \
+        less                        \
+        apt-transport-https         \
+        curl                        \
+        wget                        \
+        gnupg2                      \
+        libgmp10                    \
+        libapr1                     \
+        libaprutil1                 \
+        openssl                     \
+        ca-certificates             \
+        libssl1.1                   \
+        zlib1g                      \
+        zstd                        \
+        libzstd1                    \
+        libssh2-1                   \
+        python3-pip                 \
+        libfftw3-bin                \
+        libarmadillo8               \
+        libglew1.5                  \
+        libglu1-mesa                \
+        libgl1-mesa-glx             \
+        libglfw3                    \
+        xvfb                        \
+        libomp5                     \
+        libopenexr22                \
+        libjpeg8                    \
+        libpng16-16                 \
+        libtiff5                    \
+        libfontconfig               \
+        aac-enc                     \
+        libfdk-aac1
