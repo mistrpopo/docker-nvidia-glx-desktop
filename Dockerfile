@@ -220,3 +220,9 @@ RUN apt-get update -y               \
         libfontconfig               \
         aac-enc                     \
         libfdk-aac1
+
+# TZDATA
+RUN wget -q "https://www.iana.org/time-zones/repository/tzdata-latest.tar.gz"
+RUN mkdir -p /opt/webnews/tzdata
+RUN tar -xzvf tzdata-latest.tar.gz -C /opt/webnews/tzdata
+RUN rm -rf ./tzdata-latest.tar.gz
