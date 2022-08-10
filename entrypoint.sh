@@ -1,16 +1,6 @@
 #!/bin/bash -e
 
-trap "echo TRAPed signal" HUP INT QUIT KILL TERM
-
-sudo chown user:user /home/user
-echo "user:$PASSWD" | sudo chpasswd
 sudo rm -rf /tmp/.X*
-sudo ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" | sudo tee /etc/timezone > /dev/null
-export LD_LIBRARY_PATH="/usr/lib/libreoffice/program:${LD_LIBRARY_PATH}"
-
-sudo ln -snf /dev/ptmx /dev/tty7
-sudo /etc/init.d/dbus start
-source /opt/gstreamer/gst-env
 
 # Install NVIDIA drivers including X graphic drivers
 if ! command -v nvidia-xconfig &> /dev/null; then
@@ -79,14 +69,3 @@ if [ "$NOVNC_ENABLE" = "true" ]; then
   sudo x11vnc -display "${DISPLAY}" -passwd "${BASIC_AUTH_PASSWORD:-$PASSWD}" -shared -forever -repeat -xkb -xrandr "resize" -rfbport 5900 ${NOVNC_VIEWONLY} &
   /opt/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen 8080 --heartbeat 10 &
 fi
-
-# Add custom processes below this section or within `supervisord.conf`
-xfce4-session &
-
-# Fix selkies-gstreamer keyboard mapping
-if [ "$NOVNC_ENABLE" != "true" ]; then
-  sudo xmodmap -e "keycode 94 shift = less less"
-fi
-
-echo "Session Running. Press [Return] to exit."
-read

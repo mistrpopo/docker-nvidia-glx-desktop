@@ -186,6 +186,10 @@ RUN dpkg --add-architecture i386 && \
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/webnews/lib
 ENV PATH=$PATH:/opt/webnews/bin
 
+# fix 'Configuring tzdata' interactive input 
+ENV TZ=Europe/Kiev
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 RUN apt-get update -y               \
     && apt-get install -y           \
         nano                        \
@@ -226,3 +230,6 @@ RUN wget -q "https://www.iana.org/time-zones/repository/tzdata-latest.tar.gz"
 RUN mkdir -p /opt/webnews/tzdata
 RUN tar -xzvf tzdata-latest.tar.gz -C /opt/webnews/tzdata
 RUN rm -rf ./tzdata-latest.tar.gz
+
+ENTRYPOINT ["entrypoint.sh"]
+CMD ["bash"]
