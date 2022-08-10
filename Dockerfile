@@ -12,7 +12,10 @@ ARG NVIDIA_VISIBLE_DEVICES=all
 ENV NVIDIA_DRIVER_CAPABILITIES all
 
 # Default environment variables (password is "mypasswd")
-ENV TZ UTC
+
+# fix 'Configuring tzdata' interactive input 
+ENV TZ=Europe/Kiev
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Temporary fix for NVIDIA container repository
 RUN apt-get clean && \
@@ -185,10 +188,6 @@ RUN dpkg --add-architecture i386 && \
 
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/webnews/lib
 ENV PATH=$PATH:/opt/webnews/bin
-
-# fix 'Configuring tzdata' interactive input 
-ENV TZ=Europe/Kiev
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update -y               \
     && apt-get install -y           \
