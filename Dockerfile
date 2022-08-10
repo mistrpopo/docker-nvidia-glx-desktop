@@ -230,5 +230,8 @@ RUN mkdir -p /opt/webnews/tzdata
 RUN tar -xzvf tzdata-latest.tar.gz -C /opt/webnews/tzdata
 RUN rm -rf ./tzdata-latest.tar.gz
 
+COPY ./entrypoint.sh /
+RUN chmod +x /entrypoint.sh
+
 ENTRYPOINT ["entrypoint.sh"]
 CMD ["bash"]
