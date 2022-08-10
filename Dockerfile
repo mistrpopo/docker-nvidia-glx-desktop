@@ -224,14 +224,16 @@ RUN apt-get update -y               \
         aac-enc                     \
         libfdk-aac1
 
+RUN apt-get -y install sudo
+
 # TZDATA
 RUN wget -q "https://www.iana.org/time-zones/repository/tzdata-latest.tar.gz"
 RUN mkdir -p /opt/webnews/tzdata
 RUN tar -xzvf tzdata-latest.tar.gz -C /opt/webnews/tzdata
 RUN rm -rf ./tzdata-latest.tar.gz
 
-COPY ./entrypoint.sh /
-RUN chmod +x /entrypoint.sh
+COPY ./entrypoint.sh ./
+RUN chmod +x ./entrypoint.sh
 
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
 CMD ["bash"]

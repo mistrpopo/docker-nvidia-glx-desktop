@@ -7,7 +7,9 @@ if ! command -v nvidia-xconfig &> /dev/null; then
   export DRIVER_VERSION=$(head -n1 </proc/driver/nvidia/version | awk '{print $8}')
   cd /tmp
   if [ ! -f "/tmp/NVIDIA-Linux-x86_64-$DRIVER_VERSION.run" ]; then
+    echo "Starting download of Nvidia GPU drivers."
     curl -fsL -O "https://us.download.nvidia.com/XFree86/Linux-x86_64/$DRIVER_VERSION/NVIDIA-Linux-x86_64-$DRIVER_VERSION.run" || curl -fsL -O "https://us.download.nvidia.com/tesla/$DRIVER_VERSION/NVIDIA-Linux-x86_64-$DRIVER_VERSION.run" || { echo "Failed NVIDIA GPU driver download. Exiting."; exit 1; }
+    echo "Finished download of Nvidia GPU drivers."
   fi
   sudo sh "NVIDIA-Linux-x86_64-$DRIVER_VERSION.run" -x
   cd "NVIDIA-Linux-x86_64-$DRIVER_VERSION"
